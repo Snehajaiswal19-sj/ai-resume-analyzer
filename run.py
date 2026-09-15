@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 import os
-from backend.resume_builder import ResumeBuilder
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from backend.resume_parser import ResumeParser
@@ -18,14 +17,13 @@ from backend.interview_questions import InterviewQuestionGenerator
 from backend.advanced_features import AdvancedFeatures
 from backend.email_sender import EmailSender
 from backend.bulk_analyzer import BulkAnalyzer
-
-
 import uuid
 import traceback
-import json
 
+# ==================== LOAD ENVIRONMENT VARIABLES ====================
 load_dotenv()
 
+# ==================== FLASK APP INIT ====================
 app = Flask(__name__, 
             template_folder='frontend/templates',
             static_folder='frontend/static')
@@ -36,10 +34,11 @@ app.config['REPORT_FOLDER'] = 'reports'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['DEBUG'] = os.getenv('DEBUG', 'True') == 'True'
 
+# Ensure folders exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['REPORT_FOLDER'], exist_ok=True)
 
-# Initialize components
+# ==================== INITIALIZE COMPONENTS ====================
 resume_parser = ResumeParser()
 skill_extractor = SkillExtractor()
 score_calculator = ScoreCalculator()
@@ -48,16 +47,16 @@ ats_checker = ATSChecker()
 jd_matcher = JDMatcher()
 cover_letter_generator = CoverLetterGenerator()
 pdf_generator = PDFGenerator()
-MONGODB_URI = 'mongodb+srv://sneha_jaiswal00:Sneha1905@cluster0.opdtagu.mongodb.net/?appName=Cluster0'
-database = Database(MONGODB_URI)
+
+# Database - automatically loads MONGODB_URI from .env
+database = Database()
+
 ml_predictor = MLScorePredictor()
 salary_predictor = SalaryPredictor()
 interview_generator = InterviewQuestionGenerator()
 advanced_features = AdvancedFeatures()
 email_sender = EmailSender()
 bulk_analyzer = BulkAnalyzer(resume_parser, skill_extractor, score_calculator)
-resume_builder = ResumeBuilder()
-
 
 
 # ==================== PAGE ROUTES ====================
@@ -66,6 +65,7 @@ resume_builder = ResumeBuilder()
 def index():
     return render_template('index.html')
 
+
 @app.route('/result')
 def show_result():
     if 'analysis_result' not in session:
@@ -73,18 +73,20 @@ def show_result():
     result = session['analysis_result']
     return render_template('result.html', result=result)
 
+
 @app.route('/compare')
 def compare_page():
     return render_template('compare.html')
+
 
 @app.route('/jd-match')
 def jd_match_page():
     return render_template('jd_match.html')
 
+
 @app.route('/bulk-analyze-page')
 def bulk_analyze_page():
     return render_template('bulk_analyze.html')
-
 
 
 @app.route('/resume-builder')
@@ -92,10 +94,10 @@ def resume_builder_page():
     return render_template('resume_builder.html')
 
 
-
 @app.route('/templates')
 def templates_page():
     return render_template('templates.html')
+
 
 # ==================== ANALYSIS ROUTES ====================
 
@@ -117,21 +119,36 @@ def analyze_resume():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
         file.save(filepath)
         
+        # Parse resume
         resume_text = resume_parser.extract_text(filepath)
+        
+        # Extract skills
         extracted_skills = skill_extractor.extract_skills(resume_text)
+        
+        # Calculate scores
         scores = score_calculator.calculate_total_score(resume_text, extracted_skills)
+        
+        # Generate suggestions
         suggestions = suggestion_generator.generate_suggestions(scores, extracted_skills, resume_text)
+        
+        # Extract contact info
         contact_info = resume_parser.extract_contact_info(resume_text)
+        
+        # Career prediction
         career_predictions = score_calculator.predict_career_roles(resume_text, extracted_skills)
+        
+        # ATS Check
         ats_result = ats_checker.check_ats_compatibility(resume_text, filename)
         
-        # Calculate target role match
+        # Target role match
         target_role_match = None
         if target_job_role:
-            target_role_match = score_calculator.calculate_target_role_match(resume_text, extracted_skills, target_job_role)
+            target_role_match = score_calculator.calculate_target_role_match(
+                resume_text, extracted_skills, target_job_role
+            )
         
+        # Store in session
         session['analysis_result'] = {
-            'user_email': user_email,
             'resume_text': resume_text,
             'extracted_skills': extracted_skills,
             'scores': scores,
@@ -144,24 +161,29 @@ def analyze_resume():
             'target_role_match': target_role_match
         }
         
-       
+        # Save to database
+        try:
+            database.save_analysis({
+                'user_email': user_email,
+                'filename': filename,
+                'resume_text': resume_text,
+                'total_score': scores['total_score'],
+                'grade': scores['grade'],
+                'skills_count': sum(len(s) for s in extracted_skills.values() if isinstance(s, list)),
+                'technical_skills': extracted_skills['technical_skills'],
+                'soft_skills': extracted_skills['soft_skills'],
+                'domain_skills': extracted_skills['domain_skills'],
+                'career_predictions': career_predictions,
+                'ats_score': ats_result['ats_score'],
+                'ats_rating': ats_result['rating'],
+                'suggestions': suggestions
+            })
+        except Exception as e:
+            print(f"DB save warning: {e}")
         
-        database.save_analysis({
-            'filename': filename,
-            'resume_text': resume_text,
-            'total_score': scores['total_score'],
-            'grade': scores['grade'],
-            'skills_count': sum(len(s) for s in extracted_skills.values()),
-            'technical_skills': extracted_skills['technical_skills'],
-            'soft_skills': extracted_skills['soft_skills'],
-            'domain_skills': extracted_skills['domain_skills'],
-            'career_predictions': career_predictions,
-            'ats_score': ats_result['ats_score'],
-            'ats_rating': ats_result['rating'],
-            'suggestions': suggestions
-        })
-        
+        # Cleanup
         os.remove(filepath)
+        
         return jsonify({'success': True, 'redirect': '/result'})
     
     except Exception as e:
@@ -169,6 +191,7 @@ def analyze_resume():
         traceback.print_exc()
         print("=========================\n")
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/compare', methods=['POST'])
 def compare_resumes():
@@ -203,13 +226,13 @@ def compare_resumes():
                 'filename': filename1,
                 'total_score': scores1['total_score'],
                 'grade': scores1['grade'],
-                'skills_count': sum(len(s) for s in skills1.values())
+                'skills_count': sum(len(s) for s in skills1.values() if isinstance(s, list))
             },
             'resume2': {
                 'filename': filename2,
                 'total_score': scores2['total_score'],
                 'grade': scores2['grade'],
-                'skills_count': sum(len(s) for s in skills2.values())
+                'skills_count': sum(len(s) for s in skills2.values() if isinstance(s, list))
             },
             'winner': 'resume1' if scores1['total_score'] > scores2['total_score'] else 'resume2'
         }
@@ -221,6 +244,7 @@ def compare_resumes():
         traceback.print_exc()
         print("=========================\n")
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/jd-match', methods=['POST'])
 def jd_match():
@@ -250,6 +274,7 @@ def jd_match():
         print("===========================\n")
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/bulk-analyze', methods=['POST'])
 def bulk_analyze():
     try:
@@ -257,19 +282,32 @@ def bulk_analyze():
         if not files:
             return jsonify({'error': 'No files uploaded'}), 400
         
+        print(f"📁 Received {len(files)} files for bulk analysis")
+        
         results = bulk_analyzer.analyze_bulk(files, app.config['UPLOAD_FOLDER'])
         
+        # Generate report
         report_dir = os.path.join(app.config['REPORT_FOLDER'], 'bulk')
         os.makedirs(report_dir, exist_ok=True)
         excel_path = os.path.join(report_dir, 'bulk_analysis.xlsx')
-        bulk_analyzer.generate_excel(results, excel_path)
         
-        database.save_bulk_analysis('Bulk Analysis', results)
+        report_path = bulk_analyzer.generate_excel(results, excel_path)
+        
+        download_url = '/download-bulk-report'
+        if report_path.endswith('.csv'):
+            download_url = '/download-bulk-report-csv'
+        
+        # Save to database
+        try:
+            database.save_bulk_analysis('Bulk Analysis', results)
+        except Exception as e:
+            print(f"DB save warning: {e}")
         
         return jsonify({
             'success': True,
             'results': results,
-            'excel_url': '/download-bulk-report'
+            'total_files': len(results),
+            'excel_url': download_url
         })
     
     except Exception as e:
@@ -278,12 +316,22 @@ def bulk_analyze():
         print("=============================\n")
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/download-bulk-report')
 def download_bulk_report():
     report_path = os.path.join(app.config['REPORT_FOLDER'], 'bulk', 'bulk_analysis.xlsx')
     if os.path.exists(report_path):
         return send_file(report_path, as_attachment=True, download_name='bulk_analysis_report.xlsx')
     return jsonify({'error': 'Report not found'}), 404
+
+
+@app.route('/download-bulk-report-csv')
+def download_bulk_report_csv():
+    report_path = os.path.join(app.config['REPORT_FOLDER'], 'bulk', 'bulk_analysis.csv')
+    if os.path.exists(report_path):
+        return send_file(report_path, as_attachment=True, download_name='bulk_analysis_report.csv')
+    return jsonify({'error': 'Report not found'}), 404
+
 
 # ==================== API ROUTES ====================
 
@@ -298,6 +346,7 @@ def predict_score():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/salary-prediction', methods=['POST'])
 def predict_salary():
     try:
@@ -311,6 +360,7 @@ def predict_salary():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/interview-questions', methods=['POST'])
 def get_interview_questions():
     try:
@@ -321,6 +371,7 @@ def get_interview_questions():
         return jsonify(questions)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/skill-gap', methods=['POST'])
 def skill_gap():
@@ -333,6 +384,7 @@ def skill_gap():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/certifications', methods=['POST'])
 def get_certifications():
     try:
@@ -342,6 +394,7 @@ def get_certifications():
         return jsonify(certs)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/industry-analysis', methods=['POST'])
 def industry_analysis():
@@ -355,6 +408,7 @@ def industry_analysis():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/grammar-check', methods=['POST'])
 def grammar_check():
     try:
@@ -364,6 +418,7 @@ def grammar_check():
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/readability', methods=['POST'])
 def check_readability():
@@ -375,6 +430,7 @@ def check_readability():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/achievements', methods=['POST'])
 def check_achievements():
     try:
@@ -385,6 +441,7 @@ def check_achievements():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/history')
 def get_history():
     try:
@@ -393,6 +450,7 @@ def get_history():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/api/stats')
 def get_stats():
     try:
@@ -400,22 +458,9 @@ def get_stats():
         return jsonify(stats)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-@app.route('/api/generate-resume', methods=['POST'])
-def generate_resume():
-    try:
-        data = request.get_json()
-        output_path = os.path.join(app.config['REPORT_FOLDER'], 'generated_resume.pdf')
-        resume_builder.generate_resume(data, output_path)
-        return jsonify({'success': True})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/download-generated-resume')
-def download_generated_resume():
-    path = os.path.join(app.config['REPORT_FOLDER'], 'generated_resume.pdf')
-    if os.path.exists(path):
-        return send_file(path, as_attachment=True, download_name='my_resume.pdf')
-    return jsonify({'error': 'Resume not found'}), 404
+
+# ==================== COVER LETTER ====================
 
 @app.route('/generate-cover-letter', methods=['POST'])
 def generate_cover_letter():
@@ -424,10 +469,15 @@ def generate_cover_letter():
         resume_text = data.get('resume_text', '')
         job_role = data.get('job_role', '')
         extracted_skills = data.get('extracted_skills', {})
-        cover_letter = cover_letter_generator.generate_cover_letter(resume_text, extracted_skills, job_role)
+        cover_letter = cover_letter_generator.generate_cover_letter(
+            resume_text, extracted_skills, job_role
+        )
         return jsonify({'cover_letter': cover_letter})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# ==================== PDF REPORT ====================
 
 @app.route('/download-report')
 def download_report():
@@ -445,11 +495,73 @@ def download_report():
         return jsonify({'error': str(e)}), 500
 
 
+# ==================== RESUME BUILDER ====================
+
+@app.route('/api/generate-resume', methods=['POST'])
+def generate_resume():
+    try:
+        from backend.resume_builder import ResumeBuilder
+        data = request.get_json()
+        output_path = os.path.join(app.config['REPORT_FOLDER'], 'generated_resume.pdf')
+        builder = ResumeBuilder()
+        builder.generate_resume(data, output_path)
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"Resume generation error: {e}")
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@app.route('/download-generated-resume')
+def download_generated_resume():
+    path = os.path.join(app.config['REPORT_FOLDER'], 'generated_resume.pdf')
+    if os.path.exists(path):
+        return send_file(path, as_attachment=True, download_name='my_resume.pdf')
+    return jsonify({'error': 'Resume not found'}), 404
 
+
+# ==================== EMAIL REPORT ====================
+
+@app.route('/send-email-report', methods=['POST'])
+def send_email_report():
+    try:
+        data = request.get_json()
+        to_email = data.get('email', '')
+        
+        if not to_email:
+            return jsonify({'error': 'Email required'}), 400
+        
+        if 'analysis_result' not in session:
+            return jsonify({'error': 'No analysis result'}), 400
+        
+        result = session['analysis_result']
+        
+        # Generate PDF first
+        report_path = os.path.join(app.config['REPORT_FOLDER'], 'resume_report.pdf')
+        pdf_generator.generate_report(result, report_path)
+        
+        # Send email
+        email_result = email_sender.send_analysis_report(to_email, result, report_path)
+        return jsonify(email_result)
+    
+    except Exception as e:
+        print("\n=== ERROR IN /send-email-report ===")
+        traceback.print_exc()
+        print("================================\n")
+        return jsonify({'error': str(e)}), 500
+
+
+# ==================== MAIN ====================
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('DEBUG', 'True') == 'True'
+    
+    print("\n" + "=" * 50)
+    print("🚀 AI Resume Analyzer Starting...")
+    print("=" * 50)
+    print(f"📍 Server: http://127.0.0.1:{port}")
+    print(f"🔧 Debug Mode: {debug}")
+    print("=" * 50 + "\n")
+    
     app.run(debug=debug, host='127.0.0.1', port=port)
