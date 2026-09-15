@@ -1,0 +1,663 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Builder - AI Resume Analyzer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .section-card {
+        border-radius: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+    }
+    .section-header {
+        border-radius: 15px 15px 0 0;
+        padding: 15px 20px;
+        font-weight: bold;
+    }
+    .section-body {
+        padding: 20px;
+    }
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+    .template-notification {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .entry-box {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+    }
+    .remove-btn {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .remove-btn:hover {
+        transform: scale(1.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📝 Resume Builder</h1>
+    <p class="text-center text-muted mb-4">Fill in your details and generate a professional resume</p>
+    
+    <!-- Template Notification -->
+    <div class="template-notification" id="templateNotification">
+        <span>
+            <i class="fas fa-check-circle"></i> 
+            Template selected: <strong id="templateName"></strong>
+        </span>
+        <button class="btn btn-sm btn-light" onclick="changeTemplate()">Change Template</button>
+    </div>
+    
+    <!-- Personal Information -->
+    <div class="card section-card shadow-sm">
+        <div class="card-header section-header bg-gradient-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-user"></i> Personal Information</h5>
+        </div>
+        <div class="card-body section-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label required-field">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="John Doe" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label required-field">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label required-field">Phone</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="+91 9876543210" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="Mumbai, India">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">LinkedIn URL</label>
+                        <input type="url" class="form-control" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">GitHub URL</label>
+                        <input type="url" class="form-control" id="github" placeholder="https://github.com/johndoe">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Professional Summary</label>
+                <textarea class="form-control" id="summary" rows="3" placeholder="Brief summary of your experience, skills, and career goals..."></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Skills -->
+    <div class="card section-card shadow-sm">
+        <div class="card-header section-header bg-gradient-success text-white">
+            <h5 class="mb-0"><i class="fas fa-tools"></i> Skills</h5>
+        </div>
+        <div class="card-body section-body">
+            <div class="mb-3">
+                <label class="form-label">Technical Skills</label>
+                <input type="text" class="form-control" id="technicalSkills" placeholder="Python, Java, SQL, AWS, Docker">
+                <small class="text-muted">Comma separated</small>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Soft Skills</label>
+                <input type="text" class="form-control" id="softSkills" placeholder="Communication, Leadership, Team Management">
+                <small class="text-muted">Comma separated</small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Work Experience -->
+    <div class="card section-card shadow-sm">
+        <div class="card-header section-header bg-gradient-info text-white">
+            <h5 class="mb-0"><i class="fas fa-briefcase"></i> Work Experience</h5>
+        </div>
+        <div class="card-body section-body">
+            <div id="experienceContainer">
+                <div class="entry-box">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 exp-title" placeholder="Job Title (e.g., Software Engineer)">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 exp-company" placeholder="Company Name">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 exp-duration" placeholder="Duration (e.g., 2020-2023)">
+                        </div>
+                    </div>
+                    <textarea class="form-control exp-description" rows="2" placeholder="Describe your responsibilities and achievements..."></textarea>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-info" onclick="addExperience()">
+                <i class="fas fa-plus"></i> Add More Experience
+            </button>
+        </div>
+    </div>
+    
+    <!-- Education -->
+    <div class="card section-card shadow-sm">
+        <div class="card-header section-header bg-gradient-warning text-white">
+            <h5 class="mb-0"><i class="fas fa-graduation-cap"></i> Education</h5>
+        </div>
+        <div class="card-body section-body">
+            <div id="educationContainer">
+                <div class="entry-box">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 edu-degree" placeholder="Degree (e.g., B.Tech CSE)">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 edu-institution" placeholder="Institution Name">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control mb-2 edu-year" placeholder="Year (e.g., 2019-2023)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-warning" onclick="addEducation()">
+                <i class="fas fa-plus"></i> Add More Education
+            </button>
+        </div>
+    </div>
+    
+    <!-- Projects -->
+    <div class="card section-card shadow-sm">
+        <div class="card-header section-header bg-gradient-danger text-white">
+            <h5 class="mb-0"><i class="fas fa-project-diagram"></i> Projects</h5>
+        </div>
+        <div class="card-body section-body">
+            <div id="projectsContainer">
+                <div class="entry-box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control mb-2 proj-name" placeholder="Project Name">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control mb-2 proj-tech" placeholder="Technologies Used">
+                        </div>
+                    </div>
+                    <textarea class="form-control proj-description" rows="2" placeholder="Project description..."></textarea>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-danger" onclick="addProject()">
+                <i class="fas fa-plus"></i> Add More Project
+            </button>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="text-center mt-4 mb-5">
+        <button class="btn btn-primary btn-lg me-2" onclick="previewResume()">
+            <i class="fas fa-eye"></i> Preview
+        </button>
+        <button class="btn btn-success btn-lg" onclick="generateResume()">
+            <i class="fas fa-file-pdf"></i> Generate PDF
+        </button>
+    </div>
+    
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Resume Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="previewContent"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-success" onclick="generateResume()">Generate PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let selectedTemplate = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const template = urlParams.get('template');
+    
+    if (template) {
+        selectedTemplate = template;
+        showTemplateNotification(template);
+    } else {
+        // Check localStorage
+        const savedTemplate = localStorage.getItem('selectedTemplate');
+        if (savedTemplate) {
+            selectedTemplate = savedTemplate;
+            showTemplateNotification(savedTemplate);
+        }
+    }
+});
+
+function showTemplateNotification(template) {
+    const notif = document.getElementById('templateNotification');
+    notif.style.display = 'flex';
+    document.getElementById('templateName').textContent = template.toUpperCase();
+}
+
+function changeTemplate() {
+    window.location.href = '/templates';
+}
+
+function addExperience() {
+    const container = document.getElementById('experienceContainer');
+    const html = `
+        <div class="entry-box">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 exp-title" placeholder="Job Title">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 exp-company" placeholder="Company Name">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 exp-duration" placeholder="Duration">
+                </div>
+            </div>
+            <textarea class="form-control exp-description" rows="2" placeholder="Describe your responsibilities..."></textarea>
+            <button class="btn btn-sm btn-outline-danger mt-2 remove-btn" onclick="this.parentElement.remove()">
+                <i class="fas fa-trash"></i> Remove
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function addEducation() {
+    const container = document.getElementById('educationContainer');
+    const html = `
+        <div class="entry-box">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 edu-degree" placeholder="Degree">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 edu-institution" placeholder="Institution">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control mb-2 edu-year" placeholder="Year">
+                </div>
+            </div>
+            <button class="btn btn-sm btn-outline-danger mt-2 remove-btn" onclick="this.parentElement.remove()">
+                <i class="fas fa-trash"></i> Remove
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function addProject() {
+    const container = document.getElementById('projectsContainer');
+    const html = `
+        <div class="entry-box">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control mb-2 proj-name" placeholder="Project Name">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control mb-2 proj-tech" placeholder="Technologies Used">
+                </div>
+            </div>
+            <textarea class="form-control proj-description" rows="2" placeholder="Project description..."></textarea>
+            <button class="btn btn-sm btn-outline-danger mt-2 remove-btn" onclick="this.parentElement.remove()">
+                <i class="fas fa-trash"></i> Remove
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+function collectData() {
+    const name = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const linkedin = document.getElementById('linkedin').value.trim();
+    const github = document.getElementById('github').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const technicalSkills = document.getElementById('technicalSkills').value.trim();
+    const softSkills = document.getElementById('softSkills').value.trim();
+    
+    if (!name || !email || !phone) {
+        alert('⚠️ Please fill required fields: Name, Email, Phone');
+        return null;
+    }
+    
+    const experiences = [];
+    document.querySelectorAll('.experience-entry, #experienceContainer .entry-box').forEach(entry => {
+        const title = entry.querySelector('.exp-title')?.value.trim() || '';
+        if (title) {
+            experiences.push({
+                title: title,
+                company: entry.querySelector('.exp-company')?.value.trim() || '',
+                duration: entry.querySelector('.exp-duration')?.value.trim() || '',
+                description: entry.querySelector('.exp-description')?.value.trim() || ''
+            });
+        }
+    });
+    
+    const educations = [];
+    document.querySelectorAll('#educationContainer .entry-box').forEach(entry => {
+        const degree = entry.querySelector('.edu-degree')?.value.trim() || '';
+        if (degree) {
+            educations.push({
+                degree: degree,
+                institution: entry.querySelector('.edu-institution')?.value.trim() || '',
+                year: entry.querySelector('.edu-year')?.value.trim() || ''
+            });
+        }
+    });
+    
+    const projects = [];
+    document.querySelectorAll('#projectsContainer .entry-box').forEach(entry => {
+        const name = entry.querySelector('.proj-name')?.value.trim() || '';
+        if (name) {
+            projects.push({
+                name: name,
+                technologies: entry.querySelector('.proj-tech')?.value.trim() || '',
+                description: entry.querySelector('.proj-description')?.value.trim() || ''
+            });
+        }
+    });
+    
+    return {
+        name, email, phone, location, linkedin, github, summary,
+        technical_skills: technicalSkills,
+        soft_skills: softSkills,
+        experiences, educations, projects,
+        template: selectedTemplate
+    };
+}
+
+function previewResume() {
+    const data = collectData();
+    if (!data) return;
+    
+    const template = selectedTemplate || 'classic';
+    
+    let html = '';
+    
+    switch(template) {
+        case 'gradient':
+            html = generateGradientTemplate(data);
+            break;
+        case 'minimal':
+            html = generateMinimalTemplate(data);
+            break;
+        case 'corporate':
+            html = generateCorporateTemplate(data);
+            break;
+        case 'dark':
+            html = generateDarkTemplate(data);
+            break;
+        case 'creative':
+            html = generateCreativeTemplate(data);
+            break;
+        case 'elegant':
+            html = generateElegantTemplate(data);
+            break;
+        case 'bold':
+            html = generateBoldTemplate(data);
+            break;
+        case 'nature':
+            html = generateNatureTemplate(data);
+            break;
+        case 'golden':
+            html = generateGoldenTemplate(data);
+            break;
+        case 'ocean':
+            html = generateOceanTemplate(data);
+            break;
+        case 'royal':
+            html = generateRoyalTemplate(data);
+            break;
+        default:
+            html = generateClassicTemplate(data);
+    }
+    
+    document.getElementById('previewContent').innerHTML = html;
+    new bootstrap.Modal(document.getElementById('previewModal')).show();
+}
+
+function generateClassicTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; padding: 30px; color: #2c3e50;">
+            <h2 style="text-align:center; letter-spacing: 3px; font-weight: bold;">${data.name.toUpperCase()}</h2>
+            <p style="text-align:center; color: #7f8c8d; font-size: 14px;">${data.email} | ${data.phone}${data.location ? ' | ' + data.location : ''}</p>
+            ${data.linkedin ? `<p style="text-align:center; font-size: 12px;">${data.linkedin}${data.github ? ' | ' + data.github : ''}</p>` : ''}
+            <hr style="border: 2px solid #2c3e50;">
+            ${data.summary ? `<h4 style="border-bottom: 1px solid #bdc3c7; padding-bottom: 5px;">SUMMARY</h4><p style="font-size: 13px;">${data.summary}</p>` : ''}
+            <h4 style="border-bottom: 1px solid #bdc3c7; padding-bottom: 5px;">SKILLS</h4>
+            <p style="font-size: 13px;">${data.technical_skills}${data.soft_skills ? ' | ' + data.soft_skills : ''}</p>
+            ${data.experiences.length > 0 ? '<h4 style="border-bottom: 1px solid #bdc3c7; padding-bottom: 5px;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `
+                <p style="font-size: 13px;"><strong>${exp.title}</strong> - ${exp.company} (${exp.duration})<br>${exp.description}</p>
+            `).join('')}
+            ${data.educations.length > 0 ? '<h4 style="border-bottom: 1px solid #bdc3c7; padding-bottom: 5px;">EDUCATION</h4>' : ''}
+            ${data.educations.map(edu => `<p style="font-size: 13px;"><strong>${edu.degree}</strong> - ${edu.institution} (${edu.year})</p>`).join('')}
+            ${data.projects.length > 0 ? '<h4 style="border-bottom: 1px solid #bdc3c7; padding-bottom: 5px;">PROJECTS</h4>' : ''}
+            ${data.projects.map(proj => `<p style="font-size: 13px;"><strong>${proj.name}</strong>${proj.technologies ? ' - ' + proj.technologies : ''}<br>${proj.description}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateGradientTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px;">
+            <h2 style="text-align:center; font-weight: bold;">${data.name}</h2>
+            <p style="text-align:center; color: #e0e0e0;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: rgba(255,255,255,0.4);">
+            ${data.summary ? `<p>${data.summary}</p>` : ''}
+            <h4 style="color: #f0f0f0;">SKILLS</h4>
+            <p>${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #f0f0f0;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p><strong>${exp.title}</strong><br>${exp.company} (${exp.duration})</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateMinimalTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; padding: 30px; border-left: 5px solid #10b981;">
+            <h2 style="color: #10b981; font-weight: bold;">${data.name}</h2>
+            <p style="color: #6b7280;">${data.email} | ${data.phone}</p>
+            <hr style="border: 1px solid #e5e7eb;">
+            ${data.summary ? `<p style="color: #4b5563;">${data.summary}</p>` : ''}
+            <h4 style="color: #10b981;">SKILLS</h4>
+            <p style="color: #4b5563;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #10b981;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #4b5563;"><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateCorporateTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: #1e3a5f; color: white; padding: 30px;">
+            <h2 style="text-align:center; color: white;">${data.name}</h2>
+            <p style="text-align:center; color: #64b5f6;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: #64b5f6;">
+            ${data.summary ? `<p style="color: #bbdefb;">${data.summary}</p>` : ''}
+            <h4 style="color: #64b5f6;">SKILLS</h4>
+            <p style="color: #bbdefb;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #64b5f6;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #bbdefb;"><strong>${exp.title}</strong> - ${exp.company} (${exp.duration})</p>`).join('')}
+            ${data.educations.length > 0 ? '<h4 style="color: #64b5f6;">EDUCATION</h4>' : ''}
+            ${data.educations.map(edu => `<p style="color: #bbdefb;"><strong>${edu.degree}</strong> - ${edu.institution}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateDarkTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 30px;">
+            <h2 style="text-align:center; color: #bb86fc;">${data.name}</h2>
+            <p style="text-align:center; color: #a0a0a0;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: #bb86fc;">
+            ${data.summary ? `<p style="color: #d0d0d0;">${data.summary}</p>` : ''}
+            <h4 style="color: #bb86fc;">SKILLS</h4>
+            <p style="color: #d0d0d0;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #bb86fc;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #d0d0d0;"><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateCreativeTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 15px;">
+            <h2 style="text-align:center;">${data.name}</h2>
+            <p style="text-align:center; color: #ffe0e6;">${data.email}</p>
+            <hr style="border-color: rgba(255,255,255,0.4);">
+            <h4>SKILLS</h4>
+            <p>${data.technical_skills}</p>
+            ${data.projects.length > 0 ? '<h4>PROJECTS</h4>' : ''}
+            ${data.projects.map(proj => `<p><strong>${proj.name}</strong><br>${proj.description}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateElegantTemplate(data) {
+    return `
+        <div style="font-family: Georgia, serif; padding: 30px; border-top: 5px solid #8b4513;">
+            <h2 style="text-align:center; color: #5d4037;">${data.name}</h2>
+            <p style="text-align:center; color: #8d6e63; font-style: italic;">${data.email} | ${data.phone}</p>
+            <hr style="border: 1px solid #d7ccc8;">
+            ${data.summary ? `<p style="color: #6d4c41;">${data.summary}</p>` : ''}
+            <h4 style="color: #5d4037;">SKILLS</h4>
+            <p style="color: #6d4c41;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #5d4037;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #6d4c41;"><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateBoldTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: #c62828; color: white; padding: 30px;">
+            <h2 style="text-align:center; letter-spacing: 2px;">${data.name.toUpperCase()}</h2>
+            <p style="text-align:center; color: #ffcdd2;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: #ffcdd2;">
+            <h4 style="color: #ffebee;">SKILLS</h4>
+            <p>${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #ffebee;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateNatureTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px;">
+            <h2 style="text-align:center;">${data.name}</h2>
+            <p style="text-align:center; color: #e8f5e9;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: rgba(255,255,255,0.4);">
+            <h4>SKILLS</h4>
+            <p>${data.technical_skills}</p>
+            ${data.educations.length > 0 ? '<h4>EDUCATION</h4>' : ''}
+            ${data.educations.map(edu => `<p><strong>${edu.degree}</strong> - ${edu.institution}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateGoldenTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%); color: white; padding: 30px;">
+            <h2 style="text-align:center; color: #ffd700;">${data.name}</h2>
+            <p style="text-align:center; color: #f0e68c;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: #ffd700;">
+            ${data.summary ? `<p style="color: #fafad2;">${data.summary}</p>` : ''}
+            <h4 style="color: #ffd700;">SKILLS</h4>
+            <p style="color: #fafad2;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #ffd700;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #fafad2;"><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateOceanTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); color: white; padding: 30px;">
+            <h2 style="text-align:center;">${data.name}</h2>
+            <p style="text-align:center; color: #e1f5fe;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: rgba(255,255,255,0.4);">
+            <h4>SKILLS</h4>
+            <p>${data.technical_skills}</p>
+            ${data.projects.length > 0 ? '<h4>PROJECTS</h4>' : ''}
+            ${data.projects.map(proj => `<p><strong>${proj.name}</strong> - ${proj.technologies}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateRoyalTemplate(data) {
+    return `
+        <div style="font-family: Arial, sans-serif; background: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%); color: white; padding: 30px;">
+            <h2 style="text-align:center;">${data.name}</h2>
+            <p style="text-align:center; color: #f3e5f5;">${data.email} | ${data.phone}</p>
+            <hr style="border-color: #f3e5f5;">
+            <h4 style="color: #f3e5f5;">SKILLS</h4>
+            <p style="color: #f3e5f5;">${data.technical_skills}</p>
+            ${data.experiences.length > 0 ? '<h4 style="color: #f3e5f5;">EXPERIENCE</h4>' : ''}
+            ${data.experiences.map(exp => `<p style="color: #f3e5f5;"><strong>${exp.title}</strong> - ${exp.company}</p>`).join('')}
+        </div>
+    `;
+}
+
+function generateResume() {
+    const data = collectData();
+    if (!data) return;
+    
+    fetch('/api/generate-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(result => {
+        if (result.success) {
+            alert('✅ Resume generated successfully!');
+            window.open('/download-generated-resume', '_blank');
+        } else {
+            alert('❌ Error: ' + (result.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        alert('❌ Error: ' + error.message);
+    });
+}
+</script>
+{% endblock %}

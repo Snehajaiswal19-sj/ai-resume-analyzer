@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Templates - AI Resume Analyzer{% endblock %}
+
+{% block extra_css %}
+<style>
+    .template-card {
+        cursor: pointer !important;
+        transition: all 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+    }
+    .template-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .template-card:active {
+        transform: scale(0.97);
+    }
+    .selected-template {
+        border: 4px solid #6366f1 !important;
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.5) !important;
+        transform: translateY(-10px);
+    }
+    .template-preview {
+        height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+    }
+    .check-badge {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #6366f1;
+        color: white;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        z-index: 10;
+    }
+    .selected-template .check-badge {
+        display: flex;
+    }
+    .badge-template {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        z-index: 5;
+    }
+    .toast-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #6366f1;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        z-index: 9999;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        font-family: Arial, sans-serif;
+        animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📄 Professional Resume Templates</h1>
+    <p class="text-center text-muted mb-5">
+        <i class="fas fa-hand-pointer"></i> Click on a template to select it - 12 professionally designed options!
+    </p>
+    
+    <div class="row g-4">
+        <!-- Template 1: Classic -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-classic" onclick="selectTemplate('classic')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-primary badge-template">Classic</span>
+                    <div class="template-preview bg-white" style="border-bottom: 3px solid #2c3e50;">
+                        <h4 style="color: #2c3e50; font-weight: bold; letter-spacing: 2px;">JOHN DOE</h4>
+                        <p style="color: #7f8c8d; font-size: 13px;">SOFTWARE ENGINEER</p>
+                        <div style="width: 50px; height: 2px; background: #2c3e50; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #34495e; text-align: center;">Python | Java | SQL | AWS</p>
+                        <p style="font-size: 10px; color: #95a5a6;">5+ years experience</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Classic Professional</h6>
+                        <small class="text-muted">Traditional & Clean</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 2: Modern Gradient -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-gradient" onclick="selectTemplate('gradient')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-warning badge-template">Modern</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #e0e0e0; font-size: 13px;">DATA SCIENTIST</p>
+                        <div style="width: 50px; height: 2px; background: white; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #f0f0f0; text-align: center;">Python | ML | TensorFlow</p>
+                        <p style="font-size: 10px; color: #d0d0d0;">AI & Analytics Expert</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Modern Gradient</h6>
+                        <small class="text-muted">Eye-catching & Bold</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 3: Minimalist -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-minimal" onclick="selectTemplate('minimal')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-success badge-template">Minimal</span>
+                    <div class="template-preview bg-white" style="border-left: 5px solid #10b981;">
+                        <h4 style="color: #10b981; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #6b7280; font-size: 13px;">PRODUCT MANAGER</p>
+                        <div style="width: 30px; height: 1px; background: #10b981; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #4b5563; text-align: center;">Agile | Scrum | Strategy</p>
+                        <p style="font-size: 10px; color: #9ca3af;">Product Visionary</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Minimalist</h6>
+                        <small class="text-muted">Simple & Elegant</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 4: Corporate -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-corporate" onclick="selectTemplate('corporate')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-info badge-template">Corporate</span>
+                    <div class="template-preview" style="background: #1e3a5f;">
+                        <div style="text-align: center; padding: 20px;">
+                            <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                            <p style="color: #64b5f6; font-size: 13px;">CLOUD ARCHITECT</p>
+                            <div style="width: 60px; height: 3px; background: #64b5f6; margin: 10px auto;"></div>
+                            <p style="font-size: 11px; color: #bbdefb; text-align: center;">AWS | Azure | DevOps</p>
+                            <p style="font-size: 10px; color: #90caf9;">Enterprise Solutions</p>
+                        </div>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Corporate Blue</h6>
+                        <small class="text-muted">Professional & Trustworthy</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 5: Creative -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-creative" onclick="selectTemplate('creative')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-danger badge-template">Creative</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #ffe0e6; font-size: 13px;">UI/UX DESIGNER</p>
+                        <div style="width: 50px; height: 2px; background: white; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #ffe0e6; text-align: center;">Figma | Adobe XD | Sketch</p>
+                        <p style="font-size: 10px; color: #ffd0d8;">Design Thinker</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Creative Pink</h6>
+                        <small class="text-muted">For Creative Roles</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 6: Dark -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-dark" onclick="selectTemplate('dark')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-dark badge-template">Dark</span>
+                    <div class="template-preview" style="background: #1a1a2e;">
+                        <h4 style="color: #e0e0e0; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #bb86fc; font-size: 13px;">DEVOPS ENGINEER</p>
+                        <div style="width: 40px; height: 2px; background: #bb86fc; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #a0a0a0; text-align: center;">Docker | Kubernetes | CI/CD</p>
+                        <p style="font-size: 10px; color: #808080;">Infrastructure Expert</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Dark Modern</h6>
+                        <small class="text-muted">Trendy & Tech</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 7: Elegant -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-elegant" onclick="selectTemplate('elegant')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-secondary badge-template">Elegant</span>
+                    <div class="template-preview bg-white" style="border-top: 5px solid #8b4513;">
+                        <h4 style="color: #5d4037; font-weight: bold; font-family: Georgia, serif;">John Doe</h4>
+                        <p style="color: #8d6e63; font-size: 13px; font-style: italic;">Business Analyst</p>
+                        <div style="width: 40px; height: 1px; background: #8b4513; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #6d4c41; text-align: center;">SQL | Excel | Power BI</p>
+                        <p style="font-size: 10px; color: #a1887f;">Data-Driven Professional</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Elegant Serif</h6>
+                        <small class="text-muted">Classy & Sophisticated</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 8: Bold Red -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-bold" onclick="selectTemplate('bold')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-danger badge-template">Bold</span>
+                    <div class="template-preview" style="background: #c62828;">
+                        <h4 style="color: white; font-weight: bold; letter-spacing: 1px;">JOHN DOE</h4>
+                        <p style="color: #ffcdd2; font-size: 13px;">MARKETING MANAGER</p>
+                        <div style="width: 50px; height: 3px; background: #ffcdd2; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #ffebee; text-align: center;">SEO | Social Media | Branding</p>
+                        <p style="font-size: 10px; color: #ffcdd2;">Growth Hacker</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Bold Red</h6>
+                        <small class="text-muted">Confident & Impactful</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 9: Nature -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-nature" onclick="selectTemplate('nature')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-success badge-template">Nature</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #e8f5e9; font-size: 13px;">ENVIRONMENTAL SCIENTIST</p>
+                        <div style="width: 40px; height: 2px; background: white; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #f1f8e9; text-align: center;">Research | Analysis | Sustainability</p>
+                        <p style="font-size: 10px; color: #e8f5e9;">Earth Advocate</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Nature Green</h6>
+                        <small class="text-muted">Fresh & Eco-friendly</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 10: Golden -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-golden" onclick="selectTemplate('golden')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-warning badge-template">Premium</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%);">
+                        <h4 style="color: #ffd700; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #f0e68c; font-size: 13px;">FINANCIAL ADVISOR</p>
+                        <div style="width: 50px; height: 2px; background: #ffd700; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #fafad2; text-align: center;">Investment | Wealth | Planning</p>
+                        <p style="font-size: 10px; color: #ffd700;">Trusted Advisor</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Golden Premium</h6>
+                        <small class="text-muted">Luxury & Elite</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 11: Ocean -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-ocean" onclick="selectTemplate('ocean')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-primary badge-template">Ocean</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);">
+                        <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #e1f5fe; font-size: 13px;">SALES MANAGER</p>
+                        <div style="width: 40px; height: 2px; background: white; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #e1f5fe; text-align: center;">CRM | Negotiation | Leads</p>
+                        <p style="font-size: 10px; color: #b3e5fc;">Revenue Generator</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Ocean Blue</h6>
+                        <small class="text-muted">Fresh & Dynamic</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template 12: Royal -->
+        <div class="col-md-4">
+            <div class="card template-card h-100 shadow-sm" id="card-royal" onclick="selectTemplate('royal')">
+                <div class="card-body p-0 position-relative">
+                    <div class="check-badge"><i class="fas fa-check"></i></div>
+                    <span class="badge bg-primary badge-template" style="background: #6a1b9a;">Royal</span>
+                    <div class="template-preview" style="background: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);">
+                        <h4 style="color: white; font-weight: bold;">JOHN DOE</h4>
+                        <p style="color: #f3e5f5; font-size: 13px;">HR MANAGER</p>
+                        <div style="width: 50px; height: 2px; background: #f3e5f5; margin: 10px auto;"></div>
+                        <p style="font-size: 11px; color: #f3e5f5; text-align: center;">Recruitment | Relations | Payroll</p>
+                        <p style="font-size: 10px; color: #e1bee7;">People Champion</p>
+                    </div>
+                    <div class="p-3 text-center">
+                        <h6 class="mb-1">Purple Royal</h6>
+                        <small class="text-muted">Elegant & Prestigious</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Action -->
+    <div class="text-center mt-5 mb-5">
+        <button class="btn btn-success btn-lg" onclick="useSelectedTemplate()">
+            <i class="fas fa-arrow-right"></i> Use Selected Template
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let selectedTemplate = null;
+
+function selectTemplate(template) {
+    console.log('Template selected:', template);
+    
+    selectedTemplate = template;
+    
+    // Remove previous selection
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected-template');
+    });
+    
+    // Add selection to clicked card
+    const selectedCard = document.getElementById('card-' + template);
+    if (selectedCard) {
+        selectedCard.classList.add('selected-template');
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('selectedTemplate', template);
+    
+    // Show toast notification
+    showToast(template);
+}
+
+function showToast(template) {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        ✅ Template "${template}" selected!<br>
+        <small>Click "Use Selected Template" below</small>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function useSelectedTemplate() {
+    if (!selectedTemplate) {
+        alert('⚠️ Please select a template first!');
+        return;
+    }
+    
+    localStorage.setItem('selectedTemplate', selectedTemplate);
+    window.location.href = '/resume-builder?template=' + selectedTemplate;
+}
+</script>
+{% endblock %}

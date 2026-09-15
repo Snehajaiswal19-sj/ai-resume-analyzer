@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}JD Match - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">🎯 Resume vs Job Description Match</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5>Upload Resume</h5>
+                </div>
+                <div class="card-body">
+                    <input type="file" id="resume" accept=".pdf,.doc,.docx,.txt" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5>Paste Job Description</h5>
+                </div>
+                <div class="card-body">
+                    <textarea id="jdText" class="form-control" rows="8" 
+                              placeholder="Paste the job description here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" onclick="matchJD()">
+            <i class="fas fa-search"></i> Match Now
+        </button>
+    </div>
+    
+    <div id="result" class="mt-5 d-none">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="text-center mb-4">Match Results</h3>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h2 id="overallMatch" class="fw-bold text-primary"></h2>
+                        <p>Overall Match</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 id="keywordMatch" class="fw-bold text-success"></h2>
+                        <p>Keyword Match</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 id="skillMatch" class="fw-bold text-info"></h2>
+                        <p>Skill Match</p>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5 class="text-success">Matching Skills</h5>
+                        <div id="matchingSkills"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-danger">Missing Skills</h5>
+                        <div id="missingSkills"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function matchJD() {
+    const file = document.getElementById('resume').files[0];
+    const jdText = document.getElementById('jdText').value;
+    
+    if (!file || !jdText) {
+        alert('Please upload resume and paste job description');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('resume', file);
+    formData.append('jd_text', jdText);
+    
+    fetch('/jd-match', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('result').classList.remove('d-none');
+        document.getElementById('overallMatch').textContent = data.overall_match + '%';
+        document.getElementById('keywordMatch').textContent = data.keyword_match + '%';
+        document.getElementById('skillMatch').textContent = data.skill_match + '%';
+        
+        document.getElementById('matchingSkills').innerHTML = 
+            data.matching_skills.map(s => `<span class="badge bg-success me-2">${s}</span>`).join('');
+        
+        document.getElementById('missingSkills').innerHTML = 
+            data.missing_skills.map(s => `<span class="badge bg-danger me-2">${s}</span>`).join('');
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    });
+}
+</script>
+{% endblock %}

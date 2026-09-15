@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Analysis - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📁 Bulk Resume Analysis</h1>
+    <p class="text-center text-muted mb-4">Upload multiple resumes at once and get Excel report</p>
+    
+    <div class="card shadow-sm">
+        <div class="card-body p-5">
+            <div class="upload-area border rounded p-5 text-center" id="bulkUploadArea">
+                <i class="fas fa-folder-open fa-4x text-primary mb-3"></i>
+                <h4>Select Multiple Resumes</h4>
+                <p class="text-muted">Upload 10-50 resumes at once (PDF, DOCX, TXT)</p>
+                <input type="file" id="bulkFiles" multiple accept=".pdf,.doc,.docx,.txt" class="d-none">
+                <button class="btn btn-primary btn-lg" onclick="document.getElementById('bulkFiles').click()">
+                    <i class="fas fa-upload"></i> Select Files
+                </button>
+            </div>
+            
+            <div id="fileList" class="mt-3"></div>
+            
+            <button class="btn btn-success btn-lg w-100 mt-3" onclick="startBulkAnalysis()" id="bulkBtn">
+                <i class="fas fa-rocket"></i> Start Bulk Analysis
+            </button>
+            
+            <div id="bulkProgress" class="progress mt-3 d-none">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="results" class="mt-4"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let selectedFiles = [];
+
+document.getElementById('bulkFiles').addEventListener('change', function(e) {
+    selectedFiles = Array.from(e.target.files);
+    displayFileList();
+});
+
+// Drag and drop support
+const uploadArea = document.getElementById('bulkUploadArea');
+
+uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    
+    const files = Array.from(e.dataTransfer.files);
+    selectedFiles = files;
+    displayFileList();
+});
+
+function displayFileList() {
+    const fileList = document.getElementById('fileList');
+    
+    if (selectedFiles.length === 0) {
+        fileList.innerHTML = '';
+        return;
+    }
+    
+    let html = `<h6 class="mb-3">Selected Files (${selectedFiles.length}):</h6>`;
+    
+    selectedFiles.forEach((file, index) => {
+        html += `
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                <span>
+                    <i class="fas fa-file text-primary"></i> 
+                    ${file.name} 
+                    <small class="text-muted">(${formatFileSize(file.size)})</small>
+                </span>
+                <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+    });
+    
+    fileList.innerHTML = html;
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    displayFileList();
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function startBulkAnalysis() {
+    if (selectedFiles.length === 0) {
+        alert('⚠️ Please select files first!');
+        return;
+    }
+    
+    if (selectedFiles.length > 50) {
+        alert('⚠️ Maximum 50 files allowed at once!');
+        return;
+    }
+    
+    const formData = new FormData();
+    selectedFiles.forEach(file => {
+        formData.append('resumes', file);
+    });
+    
+    // Show progress
+    document.getElementById('bulkProgress').classList.remove('d-none');
+    document.getElementById('bulkBtn').disabled = true;
+    document.getElementById('bulkBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+    
+    fetch('/bulk-analyze', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Hide progress
+        document.getElementById('bulkProgress').classList.add('d-none');
+        document.getElementById('bulkBtn').disabled = false;
+        document.getElementById('bulkBtn').innerHTML = '<i class="fas fa-rocket"></i> Start Bulk Analysis';
+        
+        console.log('Bulk response:', data);
+        
+        if (data.error) {
+            alert('❌ Error: ' + data.error);
+            return;
+        }
+        
+        if (data.results && Array.isArray(data.results) && data.results.length > 0) {
+            displayResults(data.results);
+            
+            // Show download button if excel available
+            if (data.excel_url) {
+                showDownloadButton(data.excel_url);
+            }
+        } else {
+            document.getElementById('results').innerHTML = `
+                <div class="alert alert-warning text-center">
+                    <h4>No results found</h4>
+                    <p>Please try again with valid resume files</p>
+                </div>
+            `;
+        }
+    })
+    .catch(error => {
+        document.getElementById('bulkProgress').classList.add('d-none');
+        document.getElementById('bulkBtn').disabled = false;
+        document.getElementById('bulkBtn').innerHTML = '<i class="fas fa-rocket"></i> Start Bulk Analysis';
+        
+        console.error('Bulk error:', error);
+        alert('❌ Error: ' + error.message);
+    });
+}
+
+function displayResults(results) {
+    const resultsDiv = document.getElementById('results');
+    
+    let html = `
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white py-3">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Results (${results.length} files)</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Filename</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Skills</th>
+                                <th>Top Role</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+    `;
+    
+    results.forEach((result, index) => {
+        if (result.error) {
+            html += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${result.filename || 'Unknown'}</td>
+                    <td colspan="4" class="text-danger">❌ ${result.error}</td>
+                    <td><span class="badge bg-danger">Failed</span></td>
+                </tr>
+            `;
+        } else {
+            const topRole = result.career_roles && result.career_roles.length > 0 
+                ? result.career_roles[0].role 
+                : 'N/A';
+            
+            const scoreColor = result.total_score >= 75 ? 'success' : 
+                               result.total_score >= 50 ? 'warning' : 'danger';
+            
+            html += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><strong>${result.filename || 'Unknown'}</strong></td>
+                    <td><span class="badge bg-${scoreColor}">${result.total_score || 0}%</span></td>
+                    <td><span class="badge bg-success">${result.grade || 'N/A'}</span></td>
+                    <td>${result.skills_count || 0}</td>
+                    <td>${topRole}</td>
+                    <td><span class="badge bg-success">✅ Passed</span></td>
+                </tr>
+            `;
+        }
+    });
+    
+    html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    resultsDiv.innerHTML = html;
+    
+    // Scroll to results
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+function showDownloadButton(url) {
+    const resultsDiv = document.getElementById('results');
+    
+    const downloadHtml = `
+        <div class="text-center mt-3">
+            <a href="${url}" class="btn btn-success btn-lg">
+                <i class="fas fa-download"></i> Download Excel Report
+            </a>
+        </div>
+    `;
+    
+    resultsDiv.insertAdjacentHTML('beforeend', downloadHtml);
+}
+</script>
+
+<style>
+.upload-area {
+    border: 3px dashed #6366f1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.upload-area:hover {
+    background: #e9ecef;
+    border-color: #4f46e5;
+}
+
+.upload-area.dragover {
+    background: #d4edda;
+    border-color: #10b981;
+    transform: scale(1.02);
+}
+
+.table-responsive {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+</style>
+{% endblock %}

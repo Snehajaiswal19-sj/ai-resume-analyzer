@@ -1,0 +1,35 @@
+{
+    "technical_skills": [
+        "Python", "Java", "JavaScript", "C++", "C#", "Ruby", "PHP", "Swift",
+        "Kotlin", "Go", "Rust", "TypeScript", "SQL", "NoSQL",
+        "Machine Learning", "Deep Learning", "NLP", "Computer Vision",
+        "Data Science", "Data Analysis", "Big Data", "Data Mining",
+        "React", "Angular", "Vue.js", "Node.js", "Django", "Flask",
+        "Spring Boot", "Express.js", "Laravel", "ASP.NET",
+        "AWS", "Azure", "GCP", "Docker", "Kubernetes", "Jenkins",
+        "TensorFlow", "PyTorch", "Keras", "Scikit-learn", "OpenCV",
+        "Pandas", "NumPy", "Matplotlib", "Seaborn", "Plotly",
+        "Git", "GitHub", "GitLab", "Bitbucket", "Linux", "Unix",
+        "REST API", "GraphQL", "SOAP", "Microservices",
+        "MongoDB", "PostgreSQL", "MySQL", "Redis", "Elasticsearch",
+        "Apache Kafka", "RabbitMQ", "Apache Spark", "Hadoop"
+    ],
+    "soft_skills": [
+        "Communication", "Leadership", "Team Management", "Teamwork",
+        "Problem Solving", "Critical Thinking", "Time Management",
+        "Project Management", "Agile", "Scrum", "Kanban",
+        "Collaboration", "Adaptability", "Creativity", "Innovation",
+        "Decision Making", "Conflict Resolution", "Mentoring",
+        "Public Speaking", "Presentation", "Negotiation",
+        "Emotional Intelligence", "Stress Management"
+    ],
+    "domain_skills": [
+        "Data Analysis", "Data Visualization", "Statistical Analysis",
+        "Business Intelligence", "Cloud Computing", "DevOps",
+        "Cybersecurity", "Blockchain", "IoT", "Robotics",
+        "Mobile Development", "Web Development", "Game Development",
+        "UI/UX Design", "Product Management", "Quality Assurance",
+        "Digital Marketing", "SEO", "Content Management",
+        "Financial Analysis", "Risk Management", "Supply Chain"
+    ]
+}

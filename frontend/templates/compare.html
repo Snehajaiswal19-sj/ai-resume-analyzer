@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Compare Resumes - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📊 Compare Two Resumes</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5>Resume 1</h5>
+                </div>
+                <div class="card-body">
+                    <input type="file" id="resume1" accept=".pdf,.doc,.docx,.txt" class="form-control mb-3">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5>Resume 2</h5>
+                </div>
+                <div class="card-body">
+                    <input type="file" id="resume2" accept=".pdf,.doc,.docx,.txt" class="form-control mb-3">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" onclick="compareResumes()">
+            <i class="fas fa-balance-scale"></i> Compare
+        </button>
+    </div>
+    
+    <div id="result" class="mt-5 d-none">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card" id="resume1Card">
+                    <div class="card-body text-center">
+                        <h3 id="resume1Score"></h3>
+                        <p id="resume1Grade"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" id="resume2Card">
+                    <div class="card-body text-center">
+                        <h3 id="resume2Score"></h3>
+                        <p id="resume2Grade"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <h3 id="winner"></h3>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function compareResumes() {
+    const file1 = document.getElementById('resume1').files[0];
+    const file2 = document.getElementById('resume2').files[0];
+    
+    if (!file1 || !file2) {
+        alert('Please select both resumes');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('resume1', file1);
+    formData.append('resume2', file2);
+    
+    fetch('/compare', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('result').classList.remove('d-none');
+        document.getElementById('resume1Score').textContent = data.resume1.total_score + '%';
+        document.getElementById('resume1Grade').textContent = 'Grade: ' + data.resume1.grade;
+        document.getElementById('resume2Score').textContent = data.resume2.total_score + '%';
+        document.getElementById('resume2Grade').textContent = 'Grade: ' + data.resume2.grade;
+        
+        const winner = data.winner === 'resume1' ? data.resume1.filename : data.resume2.filename;
+        document.getElementById('winner').textContent = '🏆 Winner: ' + winner;
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}AI Resume Analyzer - Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- HERO SECTION -->
+    <section class="hero-section text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="mb-3 fade-in">
+                    <span class="badge bg-primary" style="padding: 8px 18px; font-size: 0.85rem;">
+                        <i class="fas fa-sparkles"></i> Powered by AI & NLP
+                    </span>
+                </div>
+                <h1 class="hero-title fade-in-up">
+                    Make Your Resume <br>
+                    <span class="text-gradient">Impossible to Ignore</span>
+                </h1>
+                <p class="hero-subtitle fade-in-up">
+                    Upload your resume and get instant AI-powered analysis. 
+                    Discover your strengths, fix gaps, and land your dream job with 
+                    personalized career insights.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap fade-in-up">
+                    <button class="btn btn-primary btn-lg" onclick="scrollToUpload()">
+                        <i class="fas fa-rocket"></i> Analyze My Resume
+                    </button>
+                    <a href="/templates" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-eye"></i> View Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS SECTION -->
+    <section class="mb-5">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3">
+                <div class="card stat-card p-4">
+                    <h2 class="text-gradient mb-1" style="font-family: 'JetBrains Mono', monospace;">25+</h2>
+                    <p class="mb-0 small">AI Features</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card p-4">
+                    <h2 class="text-gradient mb-1" style="font-family: 'JetBrains Mono', monospace;">50+</h2>
+                    <p class="mb-0 small">Career Roles</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card p-4">
+                    <h2 class="text-gradient mb-1" style="font-family: 'JetBrains Mono', monospace;">12</h2>
+                    <p class="mb-0 small">Templates</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card p-4">
+                    <h2 class="text-gradient mb-1" style="font-family: 'JetBrains Mono', monospace;">100%</h2>
+                    <p class="mb-0 small">Free Forever</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UPLOAD SECTION -->
+    <section id="uploadSection" class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card" style="border-radius: 24px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="text-center mb-4">
+                            <i class="fas fa-cloud-upload-alt text-primary"></i> 
+                            Upload Your Resume
+                        </h3>
+                        
+                        <form id="resumeForm" enctype="multipart/form-data">
+                            <!-- Upload Area -->
+                            <div class="upload-area mb-4" id="uploadArea">
+                                <i class="fas fa-file-pdf fa-4x mb-3"></i>
+                                <h4>Drop your resume here</h4>
+                                <p class="text-muted mb-3">or click to browse</p>
+                                <input type="file" id="fileInput" name="resume" 
+                                       accept=".pdf,.doc,.docx,.txt" class="d-none" required>
+                                <button type="button" class="btn btn-primary" 
+                                        onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-folder-open"></i> Choose File
+                                </button>
+                                <p class="mt-3 mb-0 small text-muted">
+                                    <i class="fas fa-shield-alt"></i> Supports PDF, DOCX, TXT (Max 16MB)
+                                </p>
+                            </div>
+                            
+                            <!-- File Info -->
+                            <div id="fileInfo" class="alert alert-info d-none">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <i class="fas fa-file-check"></i>
+                                        <strong id="fileName"></strong>
+                                        <span class="text-muted ms-2" id="fileSize"></span>
+                                    </div>
+                                    <button type="button" class="btn-close" onclick="clearFile()"></button>
+                                </div>
+                            </div>
+                            
+                            <!-- Job Role -->
+                            <div class="mb-4">
+                                <label for="jobRole" class="form-label">
+                                    <i class="fas fa-bullseye"></i> Target Job Role 
+                                    <span class="text-muted small">(Optional)</span>
+                                </label>
+                                <input type="text" class="form-control" id="jobRole" 
+                                       placeholder="e.g., Data Scientist, Software Engineer, CA...">
+                                <small class="text-muted">Get a personalized match score for your target role</small>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="mb-4">
+                                <label for="userEmail" class="form-label">
+                                    <i class="fas fa-envelope"></i> Your Email 
+                                    <span class="text-muted small">(Optional - for report)</span>
+                                </label>
+                                <input type="email" class="form-control" id="userEmail" 
+                                       placeholder="your@email.com">
+                            </div>
+                            
+                            <!-- Submit -->
+                            <button type="submit" class="btn btn-primary btn-lg w-100" id="analyzeBtn">
+                                <i class="fas fa-magic"></i> Analyze My Resume
+                            </button>
+                            
+                            <!-- Progress -->
+                            <div id="progress" class="progress mt-4 d-none">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     style="width: 100%"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="mb-5">
+        <div class="text-center mb-5">
+            <h2 class="mb-3">Everything You Need to <span class="text-gradient">Get Hired</span></h2>
+            <p class="text-muted">Comprehensive analysis tools powered by AI</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-primary mb-3">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <h5>Resume Analysis</h5>
+                        <p class="text-muted mb-0">Get a detailed score with 5-parameter breakdown</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-success mb-3">
+                            <i class="fas fa-bullseye fa-2x"></i>
+                        </div>
+                        <h5>Career Prediction</h5>
+                        <p class="text-muted mb-0">Discover your best-fit roles from 50+ careers</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-info mb-3">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h5>ATS Check</h5>
+                        <p class="text-muted mb-0">Ensure your resume passes ATS systems</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-warning mb-3">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </div>
+                        <h5>Resume Builder</h5>
+                        <p class="text-muted mb-0">Create professional resumes with 12 templates</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-danger mb-3">
+                            <i class="fas fa-briefcase fa-2x"></i>
+                        </div>
+                        <h5>JD Matching</h5>
+                        <p class="text-muted mb-0">Match your resume with job descriptions</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-circle bg-primary mb-3">
+                            <i class="fas fa-money-bill-wave fa-2x"></i>
+                        </div>
+                        <h5>Salary Prediction</h5>
+                        <p class="text-muted mb-0">Know your expected salary range</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="mb-5">
+        <div class="text-center mb-5">
+            <h2 class="mb-3">How It <span class="text-gradient">Works</span></h2>
+            <p class="text-muted">Three simple steps to a better resume</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="card p-4">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 3rem; color: var(--primary); font-weight: 700;">01</div>
+                    <h5>Upload Resume</h5>
+                    <p class="text-muted mb-0">Drop your PDF, DOCX, or TXT file</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card p-4">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 3rem; color: var(--primary); font-weight: 700;">02</div>
+                    <h5>AI Analysis</h5>
+                    <p class="text-muted mb-0">Our AI analyzes your resume in seconds</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card p-4">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 3rem; color: var(--primary); font-weight: 700;">03</div>
+                    <h5>Get Insights</h5>
+                    <p class="text-muted mb-0">Receive detailed feedback & improve</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+<script>
+function scrollToUpload() {
+    document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+{% endblock %}
