@@ -1,70 +1,26 @@
-\# 🎯 AI Resume Analyzer
+\# 🎯 AI Resume Analyzer - Smart Resume Analysis \& Career Prediction
 
 
 
-<div align="center">
+!\[License](https://img.shields.io/badge/License-MIT-blue.svg)
+
+!\[Python](https://img.shields.io/badge/Python-3.11-blue.svg)
+
+!\[Flask](https://img.shields.io/badge/Flask-2.3-green.svg)
+
+!\[MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)
+
+!\[Gemini](https://img.shields.io/badge/Gemini-AI-blue.svg)
+
+!\[spaCy](https://img.shields.io/badge/spaCy-3.6-orange.svg)
 
 
 
-!\[Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge\&logo=python\&logoColor=white)
-
-!\[Flask](https://img.shields.io/badge/Flask-2.3-green?style=for-the-badge\&logo=flask\&logoColor=white)
-
-!\[MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge\&logo=mongodb\&logoColor=white)
-
-!\[spaCy](https://img.shields.io/badge/spaCy-3.6-orange?style=for-the-badge\&logo=spacy\&logoColor=white)
-
-!\[Gemini](https://img.shields.io/badge/Gemini-AI-blue?style=for-the-badge\&logo=google\&logoColor=white)
-
-!\[License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+\## 🚀 About
 
 
 
-\*\*An intelligent resume analysis tool powered by AI, NLP, and Machine Learning\*\*
-
-
-
-\*Helping job seekers optimize their resumes and land their dream jobs\*
-
-
-
-\[Features](#-features) • \[Demo](#-demo) • \[Installation](#-installation) • \[Tech Stack](#-tech-stack) • \[API](#-api-endpoints)
-
-
-
-</div>
-
-
-
-\---
-
-
-
-\## 📖 About The Project
-
-
-
-\*\*AI Resume Analyzer\*\* is a full-stack web application that uses Natural Language Processing (NLP) and Machine Learning to analyze resumes. Users can upload their resume and receive:
-
-
-
-\- 📊 \*\*Detailed scoring\*\* across 5 parameters
-
-\- 🎯 \*\*Career predictions\*\* from 50+ roles
-
-\- 🔍 \*\*Skill gap analysis\*\* for target roles
-
-\- 🛡️ \*\*ATS compatibility check\*\* to pass recruitment systems
-
-\- 💡 \*\*Personalized improvement suggestions\*\*
-
-
-
-Built with \*\*Python Flask\*\* backend, \*\*MongoDB Atlas\*\* database, and a \*\*modern aesthetic frontend\*\* with dark/light mode support.
-
-
-
-\---
+\*\*AI Resume Analyzer\*\* is a full-stack intelligent resume analysis tool powered by \*\*AI, NLP, and Machine Learning\*\*. It helps job seekers optimize their resumes with detailed scoring, career predictions, skill gap analysis, and personalized recommendations.
 
 
 
@@ -72,101 +28,87 @@ Built with \*\*Python Flask\*\* backend, \*\*MongoDB Atlas\*\* database, and a \
 
 
 
-\### 📄 Resume Analysis
+\### Core Features
 
-| Feature | Description |
+\- 📄 Multi-format Resume Upload (PDF/DOCX/TXT)
 
-|---------|-------------|
+\- 🧠 NLP-based Skill Extraction (Technical, Soft, Domain)
 
-| \*\*Multi-format Support\*\* | PDF, DOCX, TXT files |
+\- 📊 5-Parameter Resume Scoring (A+ to D grade)
 
-| \*\*NLP Skill Extraction\*\* | Technical, Soft, Domain skills |
+\- 🎯 Career Prediction from 50+ Roles
 
-| \*\*5-Parameter Scoring\*\* | Skills, Experience, Education, Formatting, Keywords |
+\- 🛡️ ATS Compatibility Check
 
-| \*\*Grade System\*\* | A+ to D grading |
-
-| \*\*Contact Extraction\*\* | Email, phone, LinkedIn, GitHub |
+\- 💼 Job Description Matching
 
 
 
-\### 🎯 Career Intelligence
+\### Advanced Features
 
-| Feature | Description |
+\- 🤖 AI Chatbot (Google Gemini)
 
-|---------|-------------|
+\- 📝 Resume Builder with 12 Templates
 
-| \*\*Career Prediction\*\* | 50+ roles with match percentage |
+\- 💌 Cover Letter Generator
 
-| \*\*Target Role Matching\*\* | Match % for any profession (CA, Doctor, Designer, etc.) |
+\- 🎓 Certification Recommendations
 
-| \*\*Skill Gap Analysis\*\* | Identify missing skills for target role |
+\- 💰 Salary Prediction (LPA Range)
 
-| \*\*Salary Prediction\*\* | Expected salary range in LPA |
+\- 🔍 Skill Gap Analysis
 
-| \*\*Certification Recommendations\*\* | Industry-recognized certifications |
+\- 📖 Readability Score
 
+\- ✍️ Grammar Check
 
+\- 📈 Bulk Analysis with Excel Export
 
-\### 🛠️ Professional Tools
+\- 🔄 Resume Comparison
 
-| Feature | Description |
+\- 📧 Email Reports
 
-|---------|-------------|
-
-| \*\*ATS Compatibility Check\*\* | Pass Applicant Tracking Systems |
-
-| \*\*Job Description Matching\*\* | Compare resume with any JD |
-
-| \*\*Resume Builder\*\* | 12 professional templates |
-
-| \*\*Cover Letter Generator\*\* | One-click personalized cover letters |
-
-| \*\*Bulk Analysis\*\* | Analyze multiple resumes with Excel export |
-
-| \*\*Resume Comparison\*\* | Compare two resumes side-by-side |
+\- 📄 PDF Report Download
 
 
 
-\### 🎓 Learning \& Development
+\### Technical Highlights
 
-| Feature | Description |
+\- Flask + MongoDB Atlas Backend
 
-|---------|-------------|
+\- NLP with spaCy for skill extraction
 
-| \*\*Interview Questions\*\* | Role-based technical \& HR questions |
+\- Machine Learning score prediction (scikit-learn)
 
-| \*\*Industry Analysis\*\* | IT, Finance, Marketing, Healthcare |
+\- Google Gemini AI integration
 
-| \*\*Grammar Check\*\* | Find and fix writing errors |
+\- Premium beige-brown theme with Dark Mode
 
-| \*\*Readability Score\*\* | Content quality analysis |
+\- Responsive Design (Bootstrap 5)
 
-| \*\*Achievement Detection\*\* | Quantify your accomplishments |
-
-
-
-\### 💻 Technical Features
-
-| Feature | Description |
-
-|---------|-------------|
-
-| \*\*AI Chatbot\*\* | Powered by Google Gemini API |
-
-| \*\*PDF Reports\*\* | Download detailed analysis reports |
-
-| \*\*Email Reports\*\* | Send reports via Gmail |
-
-| \*\*Dark Mode\*\* | Beautiful theme toggle |
-
-| \*\*MongoDB Atlas\*\* | Cloud database storage |
-
-| \*\*REST API\*\* | Programmatic access endpoints |
+\- Chart.js visualizations
 
 
 
-\---
+\## 🛠️ Tech Stack
+
+\- \*\*Backend:\*\* Python Flask 2.3
+
+\- \*\*Database:\*\* MongoDB Atlas (Cloud)
+
+\- \*\*NLP:\*\* spaCy, NLTK
+
+\- \*\*Machine Learning:\*\* scikit-learn, pandas, numpy
+
+\- \*\*AI:\*\* Google Gemini API
+
+\- \*\*Frontend:\*\* HTML5, CSS3, JavaScript, Bootstrap 5
+
+\- \*\*Charts:\*\* Chart.js
+
+\- \*\*PDF Generation:\*\* ReportLab
+
+\- \*\*Email:\*\* SMTP (Gmail App Password)
 
 
 
@@ -174,351 +116,141 @@ Built with \*\*Python Flask\*\* backend, \*\*MongoDB Atlas\*\* database, and a \
 
 
 
-<div align="center">
-
-
-
 \### 🏠 Home Page
 
-!\[Home Page](screenshots/home.png)
+<img width="1366" height="646" alt="Home Page" src="screenshots/home.png" />
 
 
 
 \### 📊 Analysis Result Dashboard
 
-!\[Analysis Result](screenshots/result.png)
+<img width="1366" height="640" alt="Result Dashboard" src="screenshots/result.png" />
 
 
 
 \### 📈 Charts \& Visualizations
 
-!\[Charts](screenshots/charts.png)
+<img width="1366" height="650" alt="Charts" src="screenshots/charts.png" />
 
 
 
 \### 🎨 Resume Builder
 
-!\[Resume Builder](screenshots/builder.png)
+<img width="1366" height="625" alt="Resume Builder" src="screenshots/builder.png" />
 
 
 
-</div>
+\### 📋 Template Gallery
 
+<img width="1366" height="514" alt="Templates" src="screenshots/templates.png" />
 
 
-> \*\*Note:\*\* Add your own screenshots in `screenshots/` folder after running the project locally.
 
+> \*\*Note:\*\* Replace these image paths with your actual screenshots after adding them to the `screenshots/` folder.
 
 
-\---
 
-
-
-\## 🛠️ Tech Stack
-
-
-
-<table>
-
-<tr>
-
-<td><b>Category</b></td>
-
-<td><b>Technologies</b></td>
-
-</tr>
-
-<tr>
-
-<td><b>Backend</b></td>
-
-<td>Python 3.11, Flask</td>
-
-</tr>
-
-<tr>
-
-<td><b>Database</b></td>
-
-<td>MongoDB Atlas (Cloud)</td>
-
-</tr>
-
-<tr>
-
-<td><b>NLP</b></td>
-
-<td>spaCy, NLTK</td>
-
-</tr>
-
-<tr>
-
-<td><b>Frontend</b></td>
-
-<td>HTML5, CSS3, JavaScript, Bootstrap 5</td>
-
-</tr>
-
-<tr>
-
-<td><b>Charts</b></td>
-
-<td>Chart.js</td>
-
-</tr>
-
-<tr>
-
-<td><b>Machine Learning</b></td>
-
-<td>scikit-learn, pandas, numpy</td>
-
-</tr>
-
-<tr>
-
-<td><b>AI</b></td>
-
-<td>Google Gemini API</td>
-
-</tr>
-
-<tr>
-
-<td><b>PDF Generation</b></td>
-
-<td>ReportLab</td>
-
-</tr>
-
-<tr>
-
-<td><b>Email</b></td>
-
-<td>SMTP (Gmail App Password)</td>
-
-</tr>
-
-<tr>
-
-<td><b>File Parsing</b></td>
-
-<td>pdfplumber, python-docx</td>
-
-</tr>
-
-</table>
-
-
-
-\---
-
-
-
-\## 🚀 Installation
+\## 🚀 Getting Started
 
 
 
 \### Prerequisites
 
+\- Python 3.11+
 
+\- MongoDB Atlas Account
 
-Before you begin, ensure you have:
+\- Google Gemini API Key
 
+\- Gmail App Password (for email feature)
 
-
-\- ✅ \*\*Python 3.11+\*\* — \[Download](https://www.python.org/downloads/)
-
-\- ✅ \*\*Git\*\* — \[Download](https://git-scm.com/downloads)
-
-\- ✅ \*\*MongoDB Atlas Account\*\* — \[Sign up free](https://www.mongodb.com/cloud/atlas)
-
-\- ✅ \*\*Google Gemini API Key\*\* — \[Get free key](https://aistudio.google.com/)
-
-\- ✅ \*\*Gmail App Password\*\* — \[How to generate](https://myaccount.google.com/apppasswords)
+\- Git
 
 
 
-\### Step 1: Clone the Repository
+\### Installation
 
 
 
 ```bash
+
+\# 1. Clone the repository
 
 git clone https://github.com/Snehajaiswal19-sj/ai-resume-analyzer.git
 
 cd ai-resume-analyzer
 
-```
 
 
-
-\### Step 2: Create Virtual Environment
-
-
-
-\*\*Windows (PowerShell):\*\*
-
-```powershell
+\# 2. Create virtual environment
 
 python -m venv venv311
 
-.\\venv311\\Scripts\\Activate.ps1
+.\\venv311\\Scripts\\Activate.ps1  # Windows PowerShell
 
-```
-
-
-
-\*\*Windows (CMD):\*\*
-
-```cmd
-
-python -m venv venv311
-
-venv311\\Scripts\\activate.bat
-
-```
+\# source venv311/bin/activate    # Mac/Linux
 
 
 
-\*\*Mac/Linux:\*\*
-
-```bash
-
-python3 -m venv venv311
-
-source venv311/bin/activate
-
-```
-
-
-
-> \*\*Note:\*\* If PowerShell shows an execution policy error, run this first:
-
-> ```powershell
-
-> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-> ```
-
-
-
-\### Step 3: Install Dependencies
-
-
-
-```bash
+\# 3. Install dependencies
 
 pip install -r requirements.txt
 
-```
 
 
-
-Or install manually:
-
-
-
-```bash
-
-pip install Flask pymongo\[srv] dnspython python-dotenv google-generativeai reportlab pdfplumber python-docx spacy scikit-learn pandas numpy nltk textstat openpyxl joblib
-
-```
-
-
-
-\### Step 4: Download spaCy English Model
-
-
-
-```bash
+\# 4. Download spaCy model
 
 pip install https://github.com/explosion/spacy-models/releases/download/en\_core\_web\_sm-3.6.0/en\_core\_web\_sm-3.6.0.tar.gz
 
-```
 
 
-
-\### Step 5: Setup Environment Variables
-
-
-
-Copy the example file:
-
-
-
-```bash
+\# 5. Setup environment variables
 
 cp .env.example .env
 
+\# Edit .env with your credentials
+
+
+
+\# 6. Run the application
+
+python run.py
+
+
+
+\# 7. Open in browser
+
+\# http://localhost:5000
+
 ```
 
 
 
-Edit `.env` file and add your credentials:
+\### Environment Variables
+
+
+
+Create a `.env` file with the following:
 
 
 
 ```env
 
-\# MongoDB Atlas Connection
-
 MONGODB\_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true\&w=majority
 
-
-
-\# Flask Configuration
-
-SECRET\_KEY=your-super-secret-key-here
+SECRET\_KEY=your-secret-key-here
 
 DEBUG=True
 
 PORT=5000
 
-
-
-\# Email Configuration (Gmail App Password)
-
 EMAIL\_USER=your-email@gmail.com
 
-EMAIL\_PASSWORD=your-16-char-app-password
-
-
-
-\# Google Gemini AI
+EMAIL\_PASSWORD=your-app-password
 
 GEMINI\_API\_KEY=your-gemini-api-key
 
 ```
-
-
-
-\### Step 6: Run the Application
-
-
-
-```bash
-
-python run.py
-
-```
-
-
-
-\### Step 7: Open in Browser
-
-
-
-```
-
-http://localhost:5000
-
-```
-
-
-
-\---
 
 
 
@@ -530,193 +262,67 @@ http://localhost:5000
 
 ai-resume-analyzer/
 
-│
+├── run.py                     # Main Flask application
 
-├── run.py                          # Main Flask application
+├── requirements.txt           # Python dependencies
 
-├── requirements.txt                # Python dependencies
+├── .env.example              # Environment template
 
-├── .env.example                    # Environment template
+├── .gitignore                # Git ignore rules
 
-├── .env                            # Your secrets (gitignored)
-
-├── .gitignore                      # Git ignore rules
-
-├── README.md                       # This file
-
-├── LICENSE                         # MIT License
+├── README.md                 # Documentation
 
 │
 
-├── backend/                        # Backend logic
+├── backend/                  # Backend logic
 
-│   ├── \_\_init\_\_.py
+│   ├── resume\_parser.py     # PDF/DOCX parsing
 
-│   ├── resume\_parser.py           # PDF/DOCX/TXT parsing
+│   ├── skill\_extractor.py   # NLP skill detection
 
-│   ├── skill\_extractor.py         # NLP skill extraction
+│   ├── score\_calculator.py  # Scoring algorithm (50+ roles)
 
-│   ├── score\_calculator.py        # Scoring \& career prediction (50+ roles)
+│   ├── ats\_checker.py       # ATS compatibility
 
-│   ├── suggestions.py             # Improvement suggestions
+│   ├── jd\_matcher.py        # JD matching
 
-│   ├── ats\_checker.py             # ATS compatibility check
+│   ├── cover\_letter.py      # Cover letter generator
 
-│   ├── jd\_matcher.py              # Job description matching
+│   ├── pdf\_generator.py     # PDF reports
 
-│   ├── cover\_letter.py            # Cover letter generator
+│   ├── database.py          # MongoDB connection
 
-│   ├── pdf\_generator.py           # PDF report generation
+│   ├── ml\_predictor.py      # ML predictions
 
-│   ├── database.py                # MongoDB Atlas connection
+│   ├── salary\_predictor.py  # Salary estimation
 
-│   ├── ml\_predictor.py            # ML score prediction
+│   ├── interview\_questions.py
 
-│   ├── salary\_predictor.py        # Salary estimation
+│   ├── advanced\_features.py
 
-│   ├── interview\_questions.py     # Interview question generator
+│   ├── email\_sender.py      # Email reports
 
-│   ├── advanced\_features.py       # Readability, grammar, certs
+│   ├── bulk\_analyzer.py     # Bulk analysis
 
-│   ├── email\_sender.py            # Email report sender
-
-│   ├── bulk\_analyzer.py           # Multiple resume analysis
-
-│   └── resume\_builder.py          # Resume PDF builder (12 templates)
+│   └── resume\_builder.py    # Resume builder
 
 │
 
-├── frontend/                       # Frontend
+├── frontend/                 # Frontend
 
-│   ├── templates/                 # HTML templates (Jinja2)
+│   ├── templates/           # HTML templates
 
-│   │   ├── base.html              # Base layout with navbar
-
-│   │   ├── index.html             # Landing/upload page
-
-│   │   ├── result.html            # Analysis result dashboard
-
-│   │   ├── compare.html           # Resume comparison
-
-│   │   ├── jd\_match.html          # JD matching page
-
-│   │   ├── bulk\_analyze.html      # Bulk analysis page
-
-│   │   ├── resume\_builder.html    # Resume builder form
-
-│   │   └── templates.html         # Template gallery (12)
-
-│   │
-
-│   └── static/                    # Static assets
-
-│       ├── css/
-
-│       │   ├── style.css          # Global styles + theme
-
-│       │   └── result.css         # Result page styles
-
-│       └── js/
-
-│           ├── main.js            # Global JavaScript
-
-│           └── upload.js          # File upload handling
+│   └── static/              # CSS/JS assets
 
 │
 
-├── uploads/                        # Uploaded resumes (temporary)
+├── uploads/                  # Uploaded files
 
-├── reports/                        # Generated PDF/Excel reports
+├── reports/                  # Generated reports
 
-├── data/                          # Skills database JSON
-
-└── screenshots/                    # Project screenshots
+└── data/                    # Skills database
 
 ```
-
-
-
-\---
-
-
-
-\## 🔗 API Endpoints
-
-
-
-\### Page Routes
-
-| Method | Endpoint | Description |
-
-|--------|----------|-------------|
-
-| `GET` | `/` | Home page |
-
-| `GET` | `/result` | Analysis result |
-
-| `GET` | `/compare` | Compare resumes page |
-
-| `GET` | `/jd-match` | JD matching page |
-
-| `GET` | `/bulk-analyze-page` | Bulk analysis page |
-
-| `GET` | `/resume-builder` | Resume builder page |
-
-| `GET` | `/templates` | Template gallery |
-
-
-
-\### Analysis Routes
-
-| Method | Endpoint | Description |
-
-|--------|----------|-------------|
-
-| `POST` | `/analyze` | Upload \& analyze resume |
-
-| `POST` | `/compare` | Compare two resumes |
-
-| `POST` | `/jd-match` | Match with job description |
-
-| `POST` | `/bulk-analyze` | Bulk resume analysis |
-
-
-
-\### API Routes
-
-| Method | Endpoint | Description |
-
-|--------|----------|-------------|
-
-| `POST` | `/api/predict-score` | ML score prediction |
-
-| `POST` | `/api/salary-prediction` | Salary range prediction |
-
-| `POST` | `/api/interview-questions` | Role-based questions |
-
-| `POST` | `/api/skill-gap` | Skill gap analysis |
-
-| `POST` | `/api/certifications` | Certification recommendations |
-
-| `POST` | `/api/industry-analysis` | Industry analysis |
-
-| `POST` | `/api/grammar-check` | Grammar check |
-
-| `POST` | `/api/readability` | Readability score |
-
-| `POST` | `/api/achievements` | Achievement detection |
-
-| `POST` | `/generate-cover-letter` | Generate cover letter |
-
-| `POST` | `/api/generate-resume` | Generate resume PDF |
-
-| `GET` | `/download-report` | Download PDF report |
-
-| `POST` | `/send-email-report` | Email report |
-
-
-
-\---
 
 
 
@@ -724,201 +330,61 @@ ai-resume-analyzer/
 
 
 
-This project features a \*\*premium warm beige-brown theme\*\* with automatic dark/light mode switching.
+\### ☀️ Light Mode
 
+\- Background: `#FAF6F0` (Warm Cream)
 
+\- Primary: `#8B6F47` (Coffee Brown)
 
-\### ☀️ Light Mode (Day)
+\- Accent: `#C9A875` (Gold Tan)
 
-| Element | Color | Preview |
 
-|---------|-------|---------|
 
-| Background | `#FAF6F0` | Warm Cream |
+\### 🌙 Dark Mode
 
-| Primary | `#8B6F47` | Rich Coffee Brown |
+\- Background: `#1A1410` (Deep Espresso)
 
-| Secondary | `#A0846B` | Warm Taupe |
+\- Primary: `#C9A875` (Warm Gold)
 
-| Accent | `#C9A875` | Soft Gold Tan |
+\- Accent: `#E5D9C7` (Cream Beige)
 
-| Text | `#2C1810` | Dark Espresso |
 
 
+\## 🔗 API Endpoints
 
-\### 🌙 Dark Mode (Night)
 
-| Element | Color | Preview |
 
-|---------|-------|---------|
+| Method | Endpoint | Description |
 
-| Background | `#1A1410` | Deep Espresso |
+|--------|----------|-------------|
 
-| Primary | `#C9A875` | Warm Gold |
+| GET | `/` | Home page |
 
-| Secondary | `#A0846B` | Taupe |
+| POST | `/analyze` | Upload \& analyze |
 
-| Accent | `#E5D9C7` | Cream Beige |
+| GET | `/result` | Analysis result |
 
-| Text | `#F5EFE6` | Warm Cream |
+| POST | `/compare` | Compare resumes |
 
+| POST | `/jd-match` | JD matching |
 
+| POST | `/bulk-analyze` | Bulk analysis |
 
-\---
+| POST | `/api/predict-score` | ML prediction |
 
+| POST | `/api/salary-prediction` | Salary range |
 
+| POST | `/api/interview-questions` | Interview Qs |
 
-\## 🎯 How It Works
+| POST | `/api/skill-gap` | Skill gap |
 
+| POST | `/api/certifications` | Certifications |
 
+| POST | `/api/grammar-check` | Grammar check |
 
-```
+| GET | `/download-report` | PDF download |
 
-1\. 📤 Upload Resume (PDF/DOCX/TXT)
-
-&#x20;  ↓
-
-2\. 🔍 Parse Text Content
-
-&#x20;  ↓
-
-3\. 🧠 Extract Skills using NLP
-
-&#x20;  ↓
-
-4\. 📊 Calculate Score (5 parameters)
-
-&#x20;  ↓
-
-5\. 🎯 Predict Careers (50+ roles)
-
-&#x20;  ↓
-
-6\. 💡 Generate Suggestions
-
-&#x20;  ↓
-
-7\. 📈 Display Dashboard with Charts
-
-```
-
-
-
-\---
-
-
-
-\## 🔐 Security Notes
-
-
-
-\- ✅ All secrets stored in `.env` file
-
-\- ✅ `.env` is gitignored (never pushed to GitHub)
-
-\- ✅ `.env.example` shows required variables only
-
-\- ✅ MongoDB Atlas provides cloud security
-
-\- ✅ Gmail App Passwords for secure email
-
-\- ⚠️ \*\*Never commit `.env` to version control\*\*
-
-
-
-\---
-
-
-
-\## 🐛 Troubleshooting
-
-
-
-\### Issue: PowerShell execution policy error
-
-
-
-\*\*Fix:\*\*
-
-```powershell
-
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-```
-
-
-
-\### Issue: spaCy model not found
-
-
-
-\*\*Fix:\*\*
-
-```bash
-
-pip install https://github.com/explosion/spacy-models/releases/download/en\_core\_web\_sm-3.6.0/en\_core\_web\_sm-3.6.0.tar.gz
-
-```
-
-
-
-\### Issue: MongoDB connection error
-
-
-
-\*\*Fix:\*\*
-
-\- Check `.env` file has correct `MONGODB\_URI`
-
-\- Verify MongoDB Atlas IP whitelist (add `0.0.0.0/0` for testing)
-
-\- Ensure database user has correct password
-
-
-
-\### Issue: Gemini API quota exceeded
-
-
-
-\*\*Fix:\*\*
-
-\- Free tier limit: 60 requests/minute
-
-\- Wait 1 minute and retry
-
-\- Chatbot will use fallback responses
-
-
-
-\### Issue: `openpyxl` not found (for Excel reports)
-
-
-
-\*\*Fix:\*\*
-
-```bash
-
-pip install openpyxl
-
-```
-
-
-
-\### Issue: `ModuleNotFoundError` for any package
-
-
-
-\*\*Fix:\*\*
-
-```bash
-
-pip install <package-name>
-
-```
-
-
-
-\---
+| POST | `/send-email-report` | Email report |
 
 
 
@@ -934,35 +400,23 @@ pip install <package-name>
 
 \- \[x] 5-parameter scoring
 
-\- \[x] Career predictions (50+ roles)
+\- \[x] 50+ career predictions
 
-\- \[x] ATS compatibility check
+\- \[x] ATS compatibility
 
-\- \[x] Job description matching
+\- \[x] JD matching
 
 \- \[x] Resume comparison
 
-\- \[x] Bulk analysis with Excel export
+\- \[x] Bulk analysis
 
 \- \[x] Resume builder (12 templates)
 
 \- \[x] Cover letter generator
 
-\- \[x] Interview questions
+\- \[x] AI chatbot
 
 \- \[x] Salary prediction
-
-\- \[x] Certification recommendations
-
-\- \[x] Grammar check
-
-\- \[x] Readability score
-
-\- \[x] Achievement detection
-
-\- \[x] AI chatbot (Google Gemini)
-
-\- \[x] PDF report generation
 
 \- \[x] Email reports
 
@@ -974,17 +428,13 @@ pip install <package-name>
 
 \- \[ ] LinkedIn profile analyzer
 
-\- \[ ] Voice input for resume
+\- \[ ] Voice input
 
 \- \[ ] Chrome extension
 
-\- \[ ] Mobile app (React Native)
+\- \[ ] Mobile app
 
 \- \[ ] Multi-language support
-
-
-
-\---
 
 
 
@@ -992,41 +442,17 @@ pip install <package-name>
 
 
 
-Contributions make the open-source community amazing! Any contributions you make are \*\*greatly appreciated\*\*.
+Contributions are welcome! Feel free to:
 
+1\. Fork the repository
 
+2\. Create a feature branch
 
-1\. \*\*Fork\*\* the repository
+3\. Commit your changes
 
-2\. \*\*Create\*\* your feature branch
+4\. Push to the branch
 
-&#x20;  ```bash
-
-&#x20;  git checkout -b feature/AmazingFeature
-
-&#x20;  ```
-
-3\. \*\*Commit\*\* your changes
-
-&#x20;  ```bash
-
-&#x20;  git commit -m 'Add some AmazingFeature'
-
-&#x20;  ```
-
-4\. \*\*Push\*\* to the branch
-
-&#x20;  ```bash
-
-&#x20;  git push origin feature/AmazingFeature
-
-&#x20;  ```
-
-5\. \*\*Open\*\* a Pull Request
-
-
-
-\---
+5\. Open a Pull Request
 
 
 
@@ -1034,11 +460,7 @@ Contributions make the open-source community amazing! Any contributions you make
 
 
 
-Distributed under the \*\*MIT License\*\*. See \[`LICENSE`](LICENSE) for more information.
-
-
-
-\---
+This project is licensed under the \*\*MIT License\*\* — see the \[LICENSE](LICENSE) file for details.
 
 
 
@@ -1056,35 +478,21 @@ Distributed under the \*\*MIT License\*\*. See \[`LICENSE`](LICENSE) for more in
 
 
 
-\---
-
-
-
 \## 🙏 Acknowledgments
 
 
 
-Special thanks to these amazing tools and services:
+\- \[Google Gemini AI](https://ai.google.dev/)
 
+\- \[spaCy](https://spacy.io/)
 
+\- \[MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 
-\- \[Google Gemini AI](https://ai.google.dev/) — AI chatbot capabilities
+\- \[Chart.js](https://www.chartjs.org/)
 
-\- \[spaCy](https://spacy.io/) — NLP processing
+\- \[Bootstrap 5](https://getbootstrap.com/)
 
-\- \[MongoDB Atlas](https://www.mongodb.com/cloud/atlas) — Cloud database
-
-\- \[Chart.js](https://www.chartjs.org/) — Beautiful charts
-
-\- \[Bootstrap 5](https://getbootstrap.com/) — Responsive framework
-
-\- \[ReportLab](https://www.reportlab.com/) — PDF generation
-
-\- \[Flask](https://flask.palletsprojects.com/) — Web framework
-
-
-
-\---
+\- \[ReportLab](https://www.reportlab.com/)
 
 
 
@@ -1092,17 +500,7 @@ Special thanks to these amazing tools and services:
 
 
 
-If this project helped you or you found it useful:
-
-
-
-\- ⭐ \*\*Star\*\* the repository
-
-\- 🐛 \*\*Report\*\* bugs
-
-\- 💡 \*\*Suggest\*\* features
-
-\- 📢 \*\*Share\*\* with others
+If this project helped you, please give it a ⭐ star!
 
 
 
@@ -1115,10 +513,6 @@ If this project helped you or you found it useful:
 
 
 \*\*Made with ❤️ using Python, Flask \& AI\*\*
-
-
-
-\*Happy Coding!\* 🚀
 
 
 
