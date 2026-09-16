@@ -246,31 +246,21 @@
 
 \### 🏠 Home Page
 
-<img src="screenshots/home.png" alt="Home Page" width="800"/>
-
-
+<img width="1362" height="632" alt="image" src="https://github.com/user-attachments/assets/256b4914-1f78-4117-a2f5-a72e3bff1a0c" />
+<img width="1363" height="634" alt="image" src="https://github.com/user-attachments/assets/48dbb857-4a49-4e77-b16f-135fda6368e7" />
 
 \### 📊 Analysis Dashboard
-
-<img src="screenshots/result.png" alt="Analysis Result" width="800"/>
-
-
-
-\### 📈 Charts \& Insights
-
-<img src="screenshots/charts.png" alt="Charts" width="800"/>
-
-
-
-\### 🎨 Resume Builder
-
-<img src="screenshots/builder.png" alt="Resume Builder" width="800"/>
-
+<img width="1365" height="630" alt="image" src="https://github.com/user-attachments/assets/ef4870c1-114c-4dc0-ae5e-ffe96edb170d" />
+<img width="1359" height="483" alt="image" src="https://github.com/user-attachments/assets/70d3386d-a3a4-4a3c-bbea-6d854958967b" />
+<img width="1365" height="632" alt="image" src="https://github.com/user-attachments/assets/c567b104-a6ed-456f-99e5-edfc3157cc09" />
+<img width="1365" height="634" alt="image" src="https://github.com/user-attachments/assets/0092ae43-d3e1-4530-824d-bb0193d3be6c" />
+<img width="1365" height="571" alt="image" src="https://github.com/user-attachments/assets/9c87e5af-b312-4f92-85c4-c3f2eb33a100" />
 
 
 \### 📋 Template Gallery
+<img width="1365" height="629" alt="image" src="https://github.com/user-attachments/assets/3884a18e-9f6f-4385-8869-7c2d39f2779f" />
+<img width="1359" height="580" alt="image" src="https://github.com/user-attachments/assets/65693342-5feb-4acf-99da-6029e413250a" />
 
-<img src="screenshots/templates.png" alt="Templates" width="800"/>
 
 
 
